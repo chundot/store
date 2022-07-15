@@ -17,6 +17,7 @@ public class ServiceException extends RuntimeException {
         usernameNotUnique,
         userNotExists,
         passwordFailed,
-        disabled
+        disabled,
+        invalidToken
     }
 }

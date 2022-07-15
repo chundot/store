@@ -14,4 +14,29 @@
         from t_user
         where username = #{username}
     </select>
+    <select id="getById" resultType="vip.lj.store.pojo.entity.User">
+        select *
+        from t_user
+        where uid = #{id}
+    </select>
+    <update id="modById">
+        update t_user
+        <set>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+        </set>
+        where uid = #{id}
+    </update>
+    <update id="modPwdById">
+        update t_user
+        set password = #{newPassword}
+        where uid = #{id}
+    </update>
 </mapper>

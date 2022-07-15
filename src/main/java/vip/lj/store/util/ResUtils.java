@@ -1,13 +1,10 @@
 package vip.lj.store.util;
 
-import com.alibaba.fastjson.JSON;
 import lombok.Data;
-import org.springframework.http.ResponseEntity;
-
-import java.io.Serializable;
+import vip.lj.store.util.common.JsonData;
 
 @Data
-public class Util {
+public class ResUtils {
     public static JsonData ok() {
         return new JsonData();
     }

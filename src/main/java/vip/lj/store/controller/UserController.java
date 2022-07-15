@@ -1,19 +1,19 @@
 package vip.lj.store.controller;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import vip.lj.store.ex.ServiceException;
 import vip.lj.store.pojo.dto.UserAddDTO;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import vip.lj.store.pojo.dto.UserModDTO;
+import vip.lj.store.pojo.dto.UserPwdDTO;
 import vip.lj.store.pojo.vo.UserLoginVO;
 import vip.lj.store.service.UserService;
-import vip.lj.store.util.JsonData;
-import vip.lj.store.util.Util;
+import vip.lj.store.util.JwtUtils;
+import vip.lj.store.util.ResUtils;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -27,31 +27,28 @@ public class UserController {
     @PostMapping("/reg")
     public Object reg(UserAddDTO userAddDTO) {
         //调用userService中的addUser方法
-        try {
-            service.addUser(userAddDTO);
-        } catch (ServiceException e) {
-            if (e.getDetail() == ServiceException.Detail.usernameNotUnique)
-                return Util.r(400, "用户名已存在");
-        }
+        service.addUser(userAddDTO);
         //返回JsonResult.ok();
-        return Util.r(200, "注册成功");
+        return ResUtils.r(200, "注册成功");
     }
 
     @PostMapping("/login")
     public Object login(UserAddDTO userAddDTO) {
-        UserLoginVO vo = null;
-        try {
-            vo = service.login(userAddDTO);
-        } catch (ServiceException e) {
-            switch (e.getDetail()) {
-                case passwordFailed:
-                    return Util.br("密码不正确");
-                case disabled:
-                    return Util.br("用户已被禁用");
-                case userNotExists:
-                    return Util.br("用户名不存在");
-            }
-        }
-        return Util.ok(vo);
+        return ResUtils.ok(service.login(userAddDTO));
+    }
+
+    @GetMapping("/info/show")
+    public Object getInfo(@RequestHeader(value="Authentication") String token) {
+        return ResUtils.ok(service.getInfo(token));
+    }
+    @PostMapping("/info/change")
+    public Object changeInfo(@RequestHeader(value="Authentication") String token, UserModDTO dto) {
+        service.modInfo(token, dto);
+        return ResUtils.ok();
+    }
+    @PostMapping("/password/change")
+    public Object changePwd(@RequestHeader(value="Authentication") String token, UserPwdDTO dto) {
+        service.modPwd(token, dto);
+        return ResUtils.ok();
     }
 }

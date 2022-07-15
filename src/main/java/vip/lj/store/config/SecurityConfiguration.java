@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,22 +13,32 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 //@EnableGlobalMethodSecurity(prePostEnabled = true)//添加此注解才可以在控制器方法上配置权限
 public class SecurityConfiguration {
+    private final AuthenticationConfiguration authenticationConfiguration;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    @Autowired
+    public SecurityConfiguration(AuthenticationConfiguration authenticationConfiguration) {
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
+    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //关闭跨域--允许跨域
         http.csrf().disable();
         //和登录注册有关的页面和请求，页面相关静态资源（images css js...）
         String[] urls = {
-                "/admin/login",
-                "/admin/add-new",
+                "/users/login",
+                "/users/reg",
                 "/**/*.js",
                 "/**/*.css",
                 "/**/*.html",
+                "/**/*.png",
+                "/**/*.jpg",
                 "/favicon.ico",
                 "/**/*"
         };

@@ -18,7 +18,7 @@ logging:
     org.chundot.mybatis: trace
 
 jwt:
-  secret: mySecret
+  secret: my@special233secret,but-not-enough
   expiration: 604800
   tokenHeader: Bearer
 mybatis:

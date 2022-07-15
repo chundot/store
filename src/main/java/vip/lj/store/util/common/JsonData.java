@@ -1,4 +1,4 @@
-package vip.lj.store.util;
+package vip.lj.store.util.common;
 import com.alibaba.fastjson.JSON;
 import lombok.Data;
 
