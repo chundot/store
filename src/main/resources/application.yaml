@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://deb0.io:3306/test
+    username: test
+    password: test
+  security:
+    user:
+      name: admin
+      password: 1234
+  jackson:
+    default-property-inclusion: non_null
+
+logging:
+  file:
+    name: C:/projects/demo.log
+  level:
+    org.chundot.mybatis: trace
+
+jwt:
+  secret: mySecret
+  expiration: 604800
+  tokenHeader: Bearer
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
