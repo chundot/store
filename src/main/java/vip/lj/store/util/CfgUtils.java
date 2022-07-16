@@ -1,14 +1,16 @@
-package vip.lj.store.config;
+package vip.lj.store.util;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import javax.annotation.PostConstruct;
+import java.io.FileNotFoundException;
 import java.security.Key;
 
 @Component
-public class TokenConfiguration {
+public class CfgUtils {
     @Value("${jwt.secret}")
     private String nsSecret;
     @Value("${jwt.expiration}")
@@ -19,6 +21,7 @@ public class TokenConfiguration {
     public static Long expiration;
     public static Key key;
     public static String tokenHeader;
+    public static String staticPath;
 
     @PostConstruct
     public void init() {
@@ -26,5 +29,10 @@ public class TokenConfiguration {
         expiration = nsExpiration;
         tokenHeader = nsTokenHeader;
         key = Keys.hmacShaKeyFor(secret.getBytes());
+        try {
+            staticPath = ResourceUtils.getURL("classpath:static").getPath();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

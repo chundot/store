@@ -15,6 +15,9 @@ import vip.lj.store.security.pojo.UDetails;
 import vip.lj.store.service.UserService;
 import vip.lj.store.util.JwtUtils;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -32,6 +35,9 @@ public class UserServiceImpl implements UserService {
         if (mapper.getByUsername(dto.getUsername()) != null)
             throw new ServiceException(ServiceException.Detail.usernameNotUnique);
         dto.setPassword(encoder.encode(dto.getPassword()));
+        if (dto.getCreatedUser() == null)
+            dto.setCreatedUser(dto.getUsername());
+        dto.setCreatedTime(LocalDateTime.now());
         mapper.addUser(dto);
     }
 
@@ -66,9 +72,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void modInfo(String token, UserModDTO dto) {
-        var id = JwtUtils.parseFromBearer(token);
-        dto.setId(id);
-        mapper.modById(dto);
+        var dt = JwtUtils.parseJwt(token);
+        if (dto.getUsername() != null && !dto.getUsername().equals(dt.getUsername()))
+            throw new ServiceException();
+        dto.setId(dt.getId());
+        modInfoInternal(dto, dt.getUsername());
     }
 
     @Override
@@ -76,8 +84,15 @@ public class UserServiceImpl implements UserService {
         var info = JwtUtils.parseJwt(token);
         if (!encoder.matches(dto.getOldPassword(), info.getPassword()))
             throw new ServiceException(ServiceException.Detail.passwordFailed);
-        dto.setNewPassword(encoder.encode(dto.getNewPassword()));
-        dto.setId(info.getId());
-        mapper.modPwdById(dto);
+        var modDTO = new UserModDTO();
+        modDTO.setId(info.getId());
+        modDTO.setPassword(encoder.encode(dto.getNewPassword()));
+        modInfoInternal(modDTO, info.getUsername());
+    }
+
+    void modInfoInternal(UserModDTO dto, String modBy) {
+        dto.setModifiedUser(modBy);
+        dto.setModifiedTime(LocalDateTime.now());
+        mapper.modById(dto);
     }
 }

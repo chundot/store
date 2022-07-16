@@ -6,8 +6,8 @@
 <mapper namespace="vip.lj.store.mapper.UserMapper">
     <insert id="addUser">
         insert
-        into t_user (username, password, is_enable)
-        values (#{username}, #{password}, 1)
+        into t_user (username, password, is_enable, created_time, created_user)
+        values (#{username}, #{password}, 1, #{createdTime}, #{createdUser})
     </insert>
     <select id="getByUsername" resultType="vip.lj.store.pojo.entity.User">
         select *
@@ -30,6 +30,15 @@
             </if>
             <if test="gender != null">
                 gender = #{gender},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime},
+            </if>
+            <if test="modifiedUser != null">
+                modified_user = #{modifiedUser},
             </if>
         </set>
         where uid = #{id}

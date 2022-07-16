@@ -2,13 +2,7 @@ package vip.lj.store.util;
 
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-import vip.lj.store.config.TokenConfiguration;
 import vip.lj.store.ex.ServiceException;
 import vip.lj.store.pojo.dto.UserTokenDTO;
 import vip.lj.store.security.pojo.UDetails;
@@ -16,13 +10,12 @@ import vip.lj.store.security.pojo.UDetails;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 public class JwtUtils {
-    private static final Long expiration = TokenConfiguration.expiration;
-    private static final Key key = TokenConfiguration.key;
-    public static String tokenHeader = TokenConfiguration.tokenHeader;
+    private static final Long expiration = CfgUtils.expiration;
+    private static final Key key = CfgUtils.key;
+    public static String tokenHeader = CfgUtils.tokenHeader;
 
     public static String getJwtString(UDetails details) {
         var claims = new HashMap<String, Object>();
