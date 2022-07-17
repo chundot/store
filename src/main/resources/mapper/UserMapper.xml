@@ -48,4 +48,35 @@
         set password = #{newPassword}
         where uid = #{id}
     </update>
+    <select id="getInfoByUsername" resultMap="UInfoResultMap">
+        select distinct t_user.uid,
+                        t_user.username,
+                        t_user.password,
+                        t_user.avatar,
+                        t_user.is_enable,
+                        t_permission.pid,
+                        t_permission.name,
+                        t_permission.value
+        from t_user
+                 left join t_user_role
+                           on t_user.uid = t_user_role.uid
+                 left join t_role_permission
+                           on t_user_role.rid = t_role_permission.rid
+                 left join t_permission
+                           on t_role_permission.pid = t_permission.pid
+        where username = #{username};
+    </select>
+
+    <resultMap id="UInfoResultMap" type="vip.lj.store.pojo.dto.UserInfoDTO">
+        <id column="uid" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="avatar" property="avatar"/>
+        <result column="is_enable" property="isEnable"/>
+        <collection property="permissions" ofType="vip.lj.store.pojo.vo.PermissionVO">
+            <id column="pid" property="id"/>
+            <result column="name" property="name"/>
+            <result column="value" property="value"/>
+        </collection>
+    </resultMap>
 </mapper>

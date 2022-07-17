@@ -20,6 +20,12 @@ public class ExceptionControllerAdvice {
                 return ResUtils.br("token无效，请重新登录");
             case usernameNotUnique:
                 return ResUtils.r(400, "用户名已存在");
+            case expiredToken:
+                return ResUtils.br("token过期，请重新登录");
+            case forbidden:
+                return ResUtils.r(403, "权限不足");
+            case notLogged:
+                return ResUtils.r(403, "未登录，请先登录！");
             default:
                 return ResUtils.br("未知错误");
         }

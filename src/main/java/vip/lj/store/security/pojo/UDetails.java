@@ -18,7 +18,12 @@ public class UDetails implements UserDetails {
     String username;
     @Setter
     String password;
+    @Getter
+    @Setter
+    String avatar;
+    @Setter
     List<SimpleGrantedAuthority> authorities;
+
     @Override
     public Collection<SimpleGrantedAuthority> getAuthorities() {
         return authorities;

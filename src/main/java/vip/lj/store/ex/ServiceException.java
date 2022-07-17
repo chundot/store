@@ -9,6 +9,7 @@ public class ServiceException extends RuntimeException {
     }
 
     public ServiceException(Detail detail) {
+        super(detail.name());
         this.detail = detail;
     }
 
@@ -18,6 +19,9 @@ public class ServiceException extends RuntimeException {
         userNotExists,
         passwordFailed,
         disabled,
-        invalidToken
+        invalidToken,
+        expiredToken,
+        forbidden,
+        notLogged
     }
 }

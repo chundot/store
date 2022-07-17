@@ -4,24 +4,21 @@ package vip.lj.store.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.datetime.DateFormatter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import vip.lj.store.ex.ServiceException;
 import vip.lj.store.pojo.dto.UserAddDTO;
 import vip.lj.store.pojo.dto.UserModDTO;
 import vip.lj.store.pojo.dto.UserPwdDTO;
 import vip.lj.store.pojo.vo.UserAvatarVO;
-import vip.lj.store.pojo.vo.UserLoginVO;
 import vip.lj.store.service.UserService;
 import vip.lj.store.util.CfgUtils;
-import vip.lj.store.util.JwtUtils;
 import vip.lj.store.util.ResUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,27 +43,32 @@ public class UserController {
 
     @PostMapping("/login")
     public Object login(UserAddDTO userAddDTO) {
-        return ResUtils.ok(service.login(userAddDTO));
+        var info = service.login(userAddDTO);
+        return ResUtils.ok(info);
     }
 
     @GetMapping("/info/show")
+    @PreAuthorize("hasAuthority('/user/show')")
     public Object getInfo(@RequestHeader(value = "Authentication") String token) {
         return ResUtils.ok(service.getInfo(token));
     }
 
     @PostMapping("/info/change")
+    @PreAuthorize("hasAuthority('/user/update')")
     public Object changeInfo(@RequestHeader(value = "Authentication") String token, UserModDTO dto) {
         service.modInfo(token, dto);
         return ResUtils.ok();
     }
 
     @PostMapping("/password/change")
+    @PreAuthorize("hasAuthority('/user/update')")
     public Object changePwd(@RequestHeader(value = "Authentication") String token, UserPwdDTO dto) {
         service.modPwd(token, dto);
         return ResUtils.ok();
     }
 
     @PostMapping("/avatar/change")
+    @PreAuthorize("hasAuthority('/user/update')")
     public Object changeAvatar(@RequestHeader(value = "Authentication") String token, MultipartFile file) {
         if (!contentTypes.contains(file.getContentType()))
             return ResUtils.br("上传失败，不支持的文件类型");

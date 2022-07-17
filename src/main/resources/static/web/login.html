@@ -153,14 +153,15 @@
             "type": "post",
             "dataType": "json",
             "success": function (json) {
-                if (json.state == 200) {
+                console.log(json)
+                if (json.state === 200) {
                     alert("登录成功！");
                     $.cookie(
                         "token",
                         "Bearer" + json.data.token,
                         {"path": "/", "expires": 7});
                     // location.href = "login.html";
-                    if (json.data.avatar == undefined) {
+                    if (json.data.avatar === undefined) {
                         $.cookie("avatar", null, {"expires": -1});
                     } else {
                         $.cookie("avatar", json.data.avatar, {"expires": 7});
@@ -168,6 +169,9 @@
                 } else {
                     alert(json.message);
                 }
+            },
+            "complete": function (xhr, status) {
+                console.log(`complete: ${status}`)
             }
         });
     });

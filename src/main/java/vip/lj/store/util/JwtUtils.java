@@ -3,6 +3,7 @@ package vip.lj.store.util;
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import vip.lj.store.ex.ServiceException;
 import vip.lj.store.pojo.dto.UserTokenDTO;
 import vip.lj.store.security.pojo.UDetails;
@@ -10,6 +11,7 @@ import vip.lj.store.security.pojo.UDetails;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 public class JwtUtils {
@@ -48,9 +50,11 @@ public class JwtUtils {
             throw new ServiceException(ServiceException.Detail.invalidToken);
         }
     }
+
     public static UserTokenDTO parseJwt(String jwt) {
         return parseJwt(jwt, true);
     }
+
     public static UserTokenDTO parseJwt(String jwt, boolean hasBearer) {
         try {
             if (hasBearer)
@@ -65,7 +69,13 @@ public class JwtUtils {
             dto.setId(Long.parseLong(claims.get("id").toString()));
             dto.setUsername(claims.get("username").toString());
             dto.setPassword(claims.get("password").toString());
+            dto.setAuthorities(JSON.parseArray(claims.get("permissions").toString(), SimpleGrantedAuthority.class));
+            log.debug("将json格式的权限信息转换为集合：{}", dto.getAuthorities());
             return dto;
+        } catch (ExpiredJwtException e) {
+            e.printStackTrace();
+            log.error("token过期，请重新登录！");
+            throw new ServiceException(ServiceException.Detail.expiredToken);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("jwt解析失败！");

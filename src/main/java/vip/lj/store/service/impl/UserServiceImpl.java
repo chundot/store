@@ -2,13 +2,12 @@ package vip.lj.store.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vip.lj.store.ex.ServiceException;
 import vip.lj.store.mapper.UserMapper;
-import vip.lj.store.pojo.dto.UserAddDTO;
-import vip.lj.store.pojo.dto.UserModDTO;
-import vip.lj.store.pojo.dto.UserPwdDTO;
+import vip.lj.store.pojo.dto.*;
 import vip.lj.store.pojo.entity.User;
 import vip.lj.store.pojo.vo.UserLoginVO;
 import vip.lj.store.security.pojo.UDetails;
@@ -16,18 +15,19 @@ import vip.lj.store.service.UserService;
 import vip.lj.store.util.JwtUtils;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
     UserMapper mapper;
     PasswordEncoder encoder;
+    UserDetailsService detailsService;
 
     @Autowired
-    public UserServiceImpl(UserMapper mapper, PasswordEncoder encoder) {
+    public UserServiceImpl(UserMapper mapper, PasswordEncoder encoder, UserDetailsService detailsService) {
         this.mapper = mapper;
         this.encoder = encoder;
+        this.detailsService = detailsService;
     }
 
     @Override
@@ -43,20 +43,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserLoginVO login(UserAddDTO dto) {
-        var info = mapper.getByUsername(dto.getUsername());
+        var info = (UDetails) detailsService.loadUserByUsername(dto.getUsername());
         if (info == null)
             throw new ServiceException(ServiceException.Detail.userNotExists);
         if (!encoder.matches(dto.getPassword(), info.getPassword()))
             throw new ServiceException(ServiceException.Detail.passwordFailed);
-        if (info.getIsEnable() == null || info.getIsEnable() == 0)
+        if (!info.isEnabled())
             throw new ServiceException(ServiceException.Detail.disabled);
         var vo = new UserLoginVO();
         vo.setAvatar(info.getAvatar());
-        var details = new UDetails();
-        details.setId(info.getUid());
-        details.setUsername(info.getUsername());
-        details.setPassword(info.getPassword());
-        vo.setToken(JwtUtils.getJwtString(details));
+        vo.setToken(JwtUtils.getJwtString(info));
         return vo;
     }
 
