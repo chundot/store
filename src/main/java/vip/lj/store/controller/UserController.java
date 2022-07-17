@@ -3,7 +3,6 @@ package vip.lj.store.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,8 +74,8 @@ public class UserController {
         var newName = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + "_" + file.getOriginalFilename();
         try {
             var newFile = new File(CfgUtils.staticPath + "/images/user");
-            if (!newFile.exists())
-                newFile.mkdirs();
+            if (!newFile.exists() && newFile.mkdirs())
+                log.info("文件夹创建成功");
             file.transferTo(new File(CfgUtils.staticPath + "/images/user", newName));
             var dto = new UserModDTO();
             dto.setAvatar(newName);
