@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="vip.lj.store.mapper.AddrMapper">
+    <insert id="addAddress">
+        insert
+        into t_address (uid, receiver, province_name, province_code, city_name, city_code, area_name, area_code, zip,
+                        address, phone, tel, tag, is_default, created_user, created_time)
+        values (#{uid}, #{receiver}, #{provinceName}, #{provinceCode}, #{cityName}, #{cityCode}, #{areaName},
+                #{areaCode}, #{zip}, #{address}, #{phone}, #{tel}, #{tag}, #{isDefault}, #{createdUser},
+                #{createdTime})
+    </insert>
+    <select id="getDByParent" resultType="vip.lj.store.pojo.entity.DictDistrict">
+        select *
+        from t_dict_district
+        where parent = #{parent}
+    </select>
+    <select id="getByAId" resultType="vip.lj.store.pojo.entity.Address">
+        select *
+        from t_address
+        where aid = #{aid}
+    </select>
+    <select id="getByUId" resultType="vip.lj.store.pojo.entity.Address">
+        select *
+        from t_address
+        where uid = #{uid}
+        order by is_default desc
+    </select>
+    <update id="setNoDefaultByUId">
+        update t_address
+        set is_default = 0
+        where uid = #{uid}
+    </update>
+    <update id="setDefaultByAId">
+        update t_address
+        set is_default = 1
+        where aid = #{aid}
+    </update>
+    <delete id="delByAId">
+        delete
+        from t_address
+        where aid = #{aid}
+    </delete>
+</mapper>

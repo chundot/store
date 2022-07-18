@@ -14,6 +14,7 @@
 		<link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
 		<script src="../bootstrap3/jquery-1.9.1.min.js"></script>
 		<script src="../bootstrap3/js/bootstrap.js"></script>
+		<script src="../bootstrap3/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
 		<!-- 字体图标 -->
 		<link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
@@ -275,12 +276,14 @@
     });
     
     function showAddressList() {
+		let token = $.cookie("token");
     	console.log("准备加载用户的收货地址列表……");
     	$("#address-list").empty();
     	$.ajax({
     		"url":"/addresses/",
     		"type":"get",
     		"dataType":"json",
+			headers: {"Authentication": token},
     		"success":function(json) {
     			console.log("count=" + json.data.length);
     			for (let i = 0; i < json.data.length; i++) {
@@ -313,13 +316,15 @@
     }
     
     function setDefault(aid) {
+		let token = $.cookie("token");
     	// alert("将把id=" + aid + "设置为默认收货地址……")
     	$.ajax({
     		"url":"/addresses/" + aid + "/set_default",
     		"type":"post",
     		"dataType":"json",
+			headers: {"Authentication": token},
     		"success":function(json) {
-    			if (json.state != 2000) {
+    			if (json.state !== 200) {
     				alert(json.message);
     			}
     			showAddressList();
@@ -333,13 +338,15 @@
     }
     
     function deleteByAid(aid) {
+		let token = $.cookie("token");
     	// alert("将把id=" + aid + "设置为默认收货地址……")
     	$.ajax({
     		"url":"/addresses/" + aid + "/delete",
     		"type":"post",
     		"dataType":"json",
+			headers: {"Authentication": token},
     		"success":function(json) {
-    			if (json.state != 2000) {
+    			if (json.state !== 200) {
     				alert(json.message);
     			}
     			showAddressList();

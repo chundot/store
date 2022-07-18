@@ -85,7 +85,7 @@ public class UserController {
             vo.setNewName(newName);
             return ResUtils.ok(vo);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.debug("上传文件失败!");
             return ResUtils.br("上传失败");
         }
     }

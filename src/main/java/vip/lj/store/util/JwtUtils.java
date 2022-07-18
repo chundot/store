@@ -73,11 +73,9 @@ public class JwtUtils {
             log.debug("将json格式的权限信息转换为集合：{}", dto.getAuthorities());
             return dto;
         } catch (ExpiredJwtException e) {
-            e.printStackTrace();
             log.error("token过期，请重新登录！");
             throw new ServiceException(ServiceException.Detail.expiredToken);
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("jwt解析失败！");
             throw new ServiceException(ServiceException.Detail.invalidToken);
         }

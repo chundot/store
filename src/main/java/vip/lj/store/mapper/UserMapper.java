@@ -1,10 +1,7 @@
 package vip.lj.store.mapper;
 
 import org.springframework.stereotype.Repository;
-import vip.lj.store.pojo.dto.UserAddDTO;
-import vip.lj.store.pojo.dto.UserInfoDTO;
-import vip.lj.store.pojo.dto.UserModDTO;
-import vip.lj.store.pojo.dto.UserPwdDTO;
+import vip.lj.store.pojo.dto.*;
 import vip.lj.store.pojo.entity.User;
 
 @Repository
