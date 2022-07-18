@@ -14,3 +14,8 @@
 - [ ] 收藏
 - [ ] 购物车
 - [ ] 订单
+
+## 怎么用
+- 修改`src/main/resources/application.yaml`的配置(数据库信息配置)。
+- 直接跑，访问[http://localhost:8080/index.html]()。
+- 用户权限需要在数据库中手动添加。
