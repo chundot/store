@@ -1,11 +1,12 @@
 package vip.lj.store.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
 import vip.lj.store.pojo.dto.AddressAddDTO;
 import vip.lj.store.pojo.entity.Address;
 import vip.lj.store.pojo.entity.DictDistrict;
-
-import java.util.List;
 
 @Repository
 public interface AddrMapper {

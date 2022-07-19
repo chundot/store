@@ -1,13 +1,20 @@
 package vip.lj.store.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import vip.lj.store.service.ProductService;
+import vip.lj.store.util.ResUtils;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
+  @Autowired
+  ProductService productService;
 
   //
   // 获取销商品列表
@@ -15,8 +22,7 @@ public class ProductController {
   //
   @GetMapping("/hot")
   public Object getHot() {
-    // not implemented
-    return null;
+    return ResUtils.ok(productService.getHot());
   }
 
   //
@@ -25,8 +31,7 @@ public class ProductController {
   //
   @GetMapping("/{id}/detail")
   public Object getDetail(@PathVariable("id") Long id) {
-    // not implemented
-    return null;
+    return ResUtils.ok(productService.getById(id));
   }
 
 }
