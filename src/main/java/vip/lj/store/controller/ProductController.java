@@ -13,8 +13,12 @@ import vip.lj.store.util.ResUtils;
 @RequestMapping("/products")
 public class ProductController {
 
-  @Autowired
   ProductService productService;
+
+  @Autowired
+  public ProductController(ProductService productService) {
+    this.productService = productService;
+  }
 
   //
   // 获取销商品列表

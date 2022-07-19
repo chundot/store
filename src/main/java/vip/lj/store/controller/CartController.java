@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.var;
 import vip.lj.store.pojo.dto.CartAddDTO;
 import vip.lj.store.service.CartService;
 import vip.lj.store.service.ProductService;
@@ -17,12 +16,14 @@ import vip.lj.store.util.ResUtils;
 @RestController
 @RequestMapping("/carts")
 public class CartController {
-
-  @Autowired
   CartService cartService;
+  ProductService productService;
 
   @Autowired
-  ProductService productService;
+  public CartController(CartService cartService, ProductService productService) {
+    this.cartService = cartService;
+    this.productService = productService;
+  }
 
   // 获取用户购物车列表
   // 返回 cid/image/title/realPrice/num

@@ -9,9 +9,11 @@ import vip.lj.store.service.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
+  private final ProductMapper mapper;
   @Autowired
-  private ProductMapper mapper;
+  public ProductServiceImpl(ProductMapper mapper) {
+    this.mapper = mapper;
+  }
 
   @Override
   public Product getById(Long id) {

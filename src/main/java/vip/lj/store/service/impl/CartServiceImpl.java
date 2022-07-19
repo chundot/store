@@ -15,9 +15,12 @@ import vip.lj.store.service.CartService;
 
 @Service
 public class CartServiceImpl implements CartService {
+  CartMapper mapper;
 
   @Autowired
-  CartMapper mapper;
+  public CartServiceImpl(CartMapper mapper) {
+    this.mapper = mapper;
+  }
 
   @Override
   public List<CartInfoDTO> getByUserId(Long uid) {
