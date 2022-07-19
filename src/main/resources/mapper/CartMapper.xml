@@ -5,8 +5,12 @@
 
 <mapper namespace="vip.lj.store.mapper.CartMapper">
 
-        <sql id="getByUserId" resultType="vip.lj.store.pojo.dto.CartInfoDTO">
-         select cid,image,title,price as realPrice,num from t_cart where uid = #{uid}
-        </sql>
+    <select id="getByUserId" resultType="vip.lj.store.pojo.dto.CartInfoDTO">
+        select cid, image, title, t_cart.price as realPrice, t_cart.num
+        from t_cart
+                 left join t_product tp
+                           on t_cart.num = tp.num
+        where uid = #{uid}
+    </select>
 
 </mapper>

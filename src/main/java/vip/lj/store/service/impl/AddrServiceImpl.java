@@ -1,5 +1,6 @@
 package vip.lj.store.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vip.lj.store.mapper.AddrMapper;
 import vip.lj.store.pojo.dto.AddressAddDTO;
@@ -14,7 +15,7 @@ import java.util.List;
 @Service
 public class AddrServiceImpl implements AddrService {
     AddrMapper mapper;
-
+    @Autowired
     public AddrServiceImpl(AddrMapper mapper) {
         this.mapper = mapper;
     }
