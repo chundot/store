@@ -34,3 +34,5 @@ build/
 
 ### Configs ###
 src/main/resources/application.yaml
+
+*.log
