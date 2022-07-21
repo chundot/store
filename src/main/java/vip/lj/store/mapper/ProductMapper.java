@@ -4,11 +4,13 @@ import org.springframework.stereotype.Repository;
 
 import vip.lj.store.pojo.entity.Product;
 
+import java.util.List;
+
 @Repository
 public interface ProductMapper {
 
-  public Product getById(Long id);
+  Product getById(Long id);
 
-  public Product getHot();
+  List<Product> getHot();
 
 }

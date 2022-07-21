@@ -2,10 +2,12 @@ package vip.lj.store.service;
 
 import vip.lj.store.pojo.entity.Product;
 
+import java.util.List;
+
 public interface ProductService {
 
-  public Product getById(Long id);
+  Product getById(Long id);
 
-  public Product getHot();
+  List<Product> getHot();
 
 }

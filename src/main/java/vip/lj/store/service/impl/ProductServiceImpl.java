@@ -7,6 +7,8 @@ import vip.lj.store.mapper.ProductMapper;
 import vip.lj.store.pojo.entity.Product;
 import vip.lj.store.service.ProductService;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
   private final ProductMapper mapper;
@@ -21,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product getHot() {
+  public List<Product> getHot() {
     return mapper.getHot();
   }
 
