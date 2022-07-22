@@ -156,7 +156,7 @@
                     <p><small><b>学子商城</b>发货并提供售后服务,今日下单,明日送达</small></p>
                 </div>
                 <div class="col-md-12 form-space">
-                    <input class="btn btn-primary btn-lg btn-block" type="button" value="立即购买">
+                    <input id="btn-buy" class="btn btn-primary btn-lg btn-block" type="button" value="立即购买">
                 </div>
                 <div class="col-md-12 form-space">
                     <button id="btn-add-to-cart" type="button" class="btn btn-default go-cart"><span
@@ -366,6 +366,31 @@
             "success": function (json) {
                 if (json.state === 200) {
                     alert("操作成功！");
+                } else {
+                    alert(json.message);
+                }
+            },
+            "error": function (xhr) {
+                alert("您还没有登录，或登录信息已经过期，请重新登录！"
+                    + "\n\nHTTP响应码：" + xhr.status);
+                // location.href = "login.html";
+            }
+        });
+    });
+
+    $("#btn-buy").click(function () {
+        $.ajax({
+            "url": "/carts/add_to_cart",
+            "data": {
+                "pid": id,
+                "amount": $("#num").val()
+            },
+            headers: {"Authentication": $.cookie("token")},
+            "type": "post",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.state === 200) {
+                    window.location.href = "cart.html";
                 } else {
                     alert(json.message);
                 }
