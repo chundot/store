@@ -13,4 +13,8 @@ public interface CartService {
   List<CartInfoDTO> getByCartIds(List<Long> cids);
 
   void create(Product product, UserTokenDTO info, Integer num);
+
+  void deleteCartByIds(List<Long> cids);
+
+  void updateNumById(Long cid,Long num);
 }

@@ -12,6 +12,7 @@
                            on t_cart.pid = tp.id
         where uid = #{uid}
     </select>
+
     <select id="getByCartIds" resultType="vip.lj.store.pojo.dto.CartInfoDTO">
         select cid, image, title, t_cart.price as realPrice, t_cart.num
         from t_cart
@@ -22,8 +23,21 @@
             #{cid}
         </foreach>
     </select>
+
     <insert id="addCart">
         insert into t_cart(cid, uid, pid, num, price, created_user, created_time)
         values (#{cid}, #{uid}, #{pid}, #{num}, #{price}, #{createdUser}, #{createdTime})
     </insert>
+
+    <delete id="deleteCartByIds">
+        delete from t_cart
+        where cid in
+        <foreach collection="cids" item="cid" open="(" close=")" separator=",">
+            #{cid}
+        </foreach>
+    </delete>
+
+    <update id="updateNumById">
+        update t_cart set num = #{num} where cid=#{cid}
+    </update>
 </mapper>

@@ -13,6 +13,8 @@ import vip.lj.store.service.ProductService;
 import vip.lj.store.util.JwtUtils;
 import vip.lj.store.util.ResUtils;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/carts")
 public class CartController {
@@ -41,7 +43,7 @@ public class CartController {
     return null;
   }
 
-  @PostMapping("add_to_cart")
+  @PostMapping("/add_to_cart")
   public Object addToCart(@RequestHeader(value = "Authentication") String token, CartAddDTO dto) {
 
     var info = JwtUtils.parseJwt(token);
@@ -51,4 +53,15 @@ public class CartController {
     return ResUtils.ok();
   }
 
+  @PostMapping("/remove_by_ids")
+  public Object removeCartByIds(List<Long> ids){
+    cartService.deleteCartByIds(ids);
+    return ResUtils.ok();
+  }
+
+  @PostMapping("/update_num_by_id")
+  public Object updateNumById(Long cid,Long num){
+    cartService.updateNumById(cid,num);
+    return ResUtils.ok();
+  }
 }

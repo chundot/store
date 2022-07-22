@@ -38,4 +38,19 @@ public class CartMapperTest {
     cartMapper.addCart(cart);
     log.info("{}",cart.getCid());
   }
+
+  @Test
+  void deleteCartByIds() {
+    List<Long> ids = new ArrayList<>();
+    ids.add(1L);
+    ids.add(2L);
+    ids.add(3L);
+    cartMapper.deleteCartByIds(ids);
+  }
+
+  @Test
+  void updateNumById(){
+    cartMapper.updateNumById(5L,5L);
+  }
+
 }

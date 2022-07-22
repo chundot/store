@@ -14,5 +14,9 @@ public interface CartMapper {
 
   List<CartInfoDTO> getByCartIds(List<Long> cids);
 
+  void deleteCartByIds(List<Long> cids);
+
+  void updateNumById(Long cid,Long num);
+
   void addCart(Cart cart);
 }

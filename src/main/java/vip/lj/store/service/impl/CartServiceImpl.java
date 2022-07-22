@@ -44,4 +44,12 @@ public class CartServiceImpl implements CartService {
     mapper.addCart(cart);
   }
 
+  public void deleteCartByIds(List<Long> cids) {
+   mapper.deleteCartByIds(cids);
+  }
+
+  public void updateNumById(Long cid,Long num) {
+    mapper.updateNumById(cid,num);
+  }
+
 }
