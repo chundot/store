@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import vip.lj.store.pojo.dto.CartInfoDTO;
+import vip.lj.store.pojo.dto.CartModDTO;
 import vip.lj.store.pojo.entity.Cart;
 
 @Repository
@@ -17,4 +18,5 @@ public interface CartMapper {
   void addCart(Cart cart);
 
   void delByCIds(List<Long> cids);
+  void modById(CartModDTO dto);
 }

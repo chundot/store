@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import vip.lj.store.mapper.CartMapper;
 import vip.lj.store.pojo.dto.CartInfoDTO;
+import vip.lj.store.pojo.dto.CartModDTO;
 import vip.lj.store.pojo.dto.UserTokenDTO;
 import vip.lj.store.pojo.entity.Cart;
 import vip.lj.store.pojo.entity.Product;
@@ -47,6 +48,11 @@ public class CartServiceImpl implements CartService {
   @Override
   public void delete(Long uid, List<Long> cids) {
     mapper.delByCIds(cids);
+  }
+
+  @Override
+  public void modByDTO(CartModDTO dto) {
+    mapper.modById(dto);
   }
 
 }

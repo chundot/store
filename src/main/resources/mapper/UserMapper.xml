@@ -34,6 +34,9 @@
             <if test="avatar != null">
                 avatar = #{avatar},
             </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
             <if test="modifiedTime != null">
                 modified_time = #{modifiedTime},
             </if>

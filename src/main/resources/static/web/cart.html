@@ -177,7 +177,7 @@
                         </tbody>
                     </table>
                     <div class="total-bar">
-                        <a href="javascript:selDelCart()" class="cart-del-sel btn btn-default btn-xs">删除所选商品</a>
+                        <a href="javascript:delSel()" class="cart-del-sel btn btn-default btn-xs">删除所选商品</a>
                         <span class="pull-right">已选商品
 								<span id="selectCount">0</span>件 总价¥
 								<span id="selectTotal">0</span>元
@@ -299,16 +299,16 @@
                 for (let i = 0; i < json.data.length; i++) {
                     console.log(json.data[i].title);
                     let html = '<tr>'
-                        + '<td><input name="cids" value="#{cid}" type="checkbox" class="ckitem" /></td>'
+                        + '<td><input name="cids" value="#{cid}" type="checkbox" class="ckitem" onclick="calcTotal()" /></td>'
                         + '<td><img src="..#{image}collect.png" class="img-responsive" /></td>'
                         + '<td>#{title}</td>'
-                        + '<td>¥<span id="goodsPrice1">#{realPrice}</span></td>'
+                        + '<td>¥<span id="goodsPrice#{cid}">#{realPrice}</span></td>'
                         + '<td>'
-                        + '<input type="button" value="-" class="num-btn" onclick="reduceNum(1)" />'
-                        + '<input type="text" id="goodsCount1" value="#{num}" size="2" readonly="readonly" class="num-text">'
-                        + '<input type="button" value="+" class="num-btn" onclick="addNum(1)" />'
+                        + '<input type="button" value="-" class="num-btn" onclick="reduceNum(#{cid})" />'
+                        + '<input type="text" id="goodsCount#{cid}" value="#{num}" size="2" readonly="readonly" class="num-text">'
+                        + '<input type="button" value="+" class="num-btn" onclick="addNum(#{cid})" />'
                         + '</td>'
-                        + '<td>¥<span id="goodsCast1">#{totalPrice}</span></td>'
+                        + '<td>¥<span id="goodsCast#{cid}">#{totalPrice}</span></td>'
                         + '<td><input type="button" onclick="deleteCart(this, #{cid})" class="cart-del btn btn-default btn-xs" value="删除" /></td>'
                         + '</tr>';
 
@@ -318,17 +318,20 @@
                     html = html.replace(/#{realPrice}/g, json.data[i].realPrice);
                     html = html.replace(/#{num}/g, json.data[i].num);
                     html = html.replace(/#{totalPrice}/g, json.data[i].realPrice * json.data[i].num);
-
                     $("#cart-list").append(html);
                 }
+                calcTotal();
             }
         });
     }
 
     function deleteCart(btn, ctx) {
         data.cids = []
-        data.cids.push(ctx)
-        $(btn).parents("tr").remove();
+        if (ctx.length)
+            data.cids = ctx
+        else data.cids.push(ctx)
+        if ($(btn))
+            $(btn).parents("tr").remove();
         $.ajax({
             "url": "/carts/del",
             "type": "post",
@@ -339,8 +342,111 @@
                 if (json.state === 200) {
                     console.log("删除成功")
                 }
+                calcTotal();
             }
         });
+    }
+
+    function delSel() {
+        let ck = $(".ckitem")
+        let q = []
+        //遍历所有按钮
+        for (let i = ck.length - 1; i >= 0; i--) {
+            //如果选中
+            if (ck[i].checked) {
+                //删除
+                $(ck[i]).parents("tr").remove();
+                q.push(ck[i].value)
+            }
+        }
+        deleteCart(null, q)
+    }
+
+    function calcTotal() {
+        let cb = $(".cart-body tr")
+        //选中商品的数量
+        let vselectCount = 0;
+        //选中商品的总价
+        let vselectTotal = 0;
+        //循环遍历所有tr
+        for (let i = 0; i < cb.length; i++) {
+            //计算每个商品的价格小计开始
+            //取出1行
+            let $tr = $(cb[i]);
+            //取单价
+            let vprice = parseFloat($tr.children(":eq(3)").children("span").html());
+            //取数量
+            let vnum = parseFloat($tr.children(":eq(4)").children(".num-text").val());
+            //小计金额
+            let vtotal = vprice * vnum;
+            //赋值
+            $tr.children(":eq(5)").children("span").html(vtotal);
+            //计算每个商品的价格小计结束
+            //检查是否选中
+            if ($tr.children(":eq(0)").children(".ckitem").prop("checked")) {
+                //计数
+                vselectCount++;
+                //计总价
+                vselectTotal += vtotal;
+            }
+            //将选中的数量和价格赋值
+            $("#selectTotal").html(vselectTotal);
+            $("#selectCount").html(vselectCount);
+        }
+    }
+
+    function checkall(ckbtn) {
+        $(".ckitem").prop("checked", $(ckbtn).prop("checked"));
+        calcTotal();
+    }/*按加号数量增*/
+    function addNum(rid) {
+        let label = $("#goodsCount" + rid)
+        let n = parseInt(label.val());
+        label.val(n + 1);
+        modById(rid, n + 1)
+        calcRow(rid);
+    }
+
+    /*按减号数量减*/
+    function reduceNum(rid) {
+        let label = $("#goodsCount" + rid)
+        let n = parseInt(label.val());
+        if (n === 1) {
+            deleteCart(label, rid)
+            return;
+        } else if (n === 0)
+            return;
+        label.val(n - 1);
+        modById(rid, n - 1);
+        calcRow(rid);
+    }
+
+    function calcRow(rid) {
+        //取单价
+        let vprice = parseFloat($("#goodsPrice" + rid).html());
+        //取数量
+        let vnum = parseFloat($("#goodsCount" + rid).val());
+        //小计金额
+        let vtotal = vprice * vnum;
+        //赋值
+        $("#goodsCast" + rid).html(vtotal);
+    }
+
+    function modById(cid, num) {
+        $.ajax({
+            "url": "/carts/mod",
+            "type": "post",
+            "dataType": "json",
+            data: {cid, num},
+            headers: {"Authentication": $.cookie("token")},
+            "success": function (json) {
+                if (json.state === 200) {
+                    console.log("修改成功")
+                }
+                calcTotal();
+            }
+        });
+
     }
 </script>
 </body>

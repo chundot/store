@@ -34,4 +34,9 @@
             #{cid}
         </foreach>
     </delete>
+    <update id="modById">
+        update t_cart
+        set num = #{num}
+        where cid = #{cid}
+    </update>
 </mapper>

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import vip.lj.store.pojo.dto.CartAddDTO;
+import vip.lj.store.pojo.dto.CartModDTO;
 import vip.lj.store.pojo.dto.OrderAddDTO;
 import vip.lj.store.service.CartService;
 import vip.lj.store.service.ProductService;
@@ -54,6 +55,11 @@ public class CartController {
   public Object deleteFromCart(@RequestHeader(value = "Authentication") String token, OrderAddDTO dto) {
     var uid = JwtUtils.parseFromBearer(token);
     cartService.delete(uid, dto.getCids());
+    return ResUtils.ok();
+  }
+  @PostMapping("mod")
+  public Object modCartNum(@RequestHeader(value = "Authentication") String token, CartModDTO dto) {
+    cartService.modByDTO(dto);
     return ResUtils.ok();
   }
 }
