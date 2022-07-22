@@ -35,4 +35,14 @@
         ORDER BY RAND()
         LIMIT 10
     </select>
+    <select id="getItemsByCartIds" resultType="vip.lj.store.pojo.entity.OrderItem">
+        select t_product.id as pid, title, image, tc.price, tc.num
+        from t_product
+        left join t_cart tc
+        on t_product.id = tc.pid
+        where tc.cid in
+        <foreach collection="cids" item="cid" open="(" close=")" separator=",">
+            #{cid}
+        </foreach>
+    </select>
 </mapper>

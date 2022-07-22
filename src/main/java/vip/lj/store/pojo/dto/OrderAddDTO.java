@@ -2,8 +2,10 @@ package vip.lj.store.pojo.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class OrderAddDTO {
-  // TODO fill in the data
-
+  Long aid;
+  List<Long> cids;
 }

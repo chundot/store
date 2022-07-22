@@ -1,17 +1,16 @@
 package vip.lj.store.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import vip.lj.store.pojo.dto.CartAddDTO;
+import vip.lj.store.pojo.dto.OrderAddDTO;
 import vip.lj.store.service.CartService;
 import vip.lj.store.service.ProductService;
 import vip.lj.store.util.JwtUtils;
 import vip.lj.store.util.ResUtils;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/carts")
@@ -34,11 +33,11 @@ public class CartController {
   }
 
   // 返回 cid/image/title/realPrice/num
-  // TODO where is cids?
   @GetMapping("/get_by_cids")
-  public Object getByCids() {
-    // not implemented
-    return null;
+  public Object getByCids(@RequestParam List<Long> cids) {
+    if (cids.size() == 0)
+      return ResUtils.br("参数为空");
+    return ResUtils.ok(cartService.getByCartIds(cids));
   }
 
   @PostMapping("add_to_cart")
@@ -51,4 +50,10 @@ public class CartController {
     return ResUtils.ok();
   }
 
+  @PostMapping("del")
+  public Object deleteFromCart(@RequestHeader(value = "Authentication") String token, OrderAddDTO dto) {
+    var uid = JwtUtils.parseFromBearer(token);
+    cartService.delete(uid, dto.getCids());
+    return ResUtils.ok();
+  }
 }

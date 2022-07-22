@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="vip.lj.store.mapper.OrderMapper">
+    <insert id="createOrder">
+        insert into t_order (oid, uid, recv_name, recv_phone, recv_province, recv_city, recv_area, recv_address, price,
+                             order_time, pay_time, status, created_user, created_time)
+        values (#{oid}, #{uid}, #{recvName}, #{recvPhone}, #{recvProvince}, #{recvCity}, #{recvArea},
+                #{recvAddress}, #{price},
+                #{orderTime}, #{payTime}, #{status}, #{createdUser}, #{createdTime})
+    </insert>
+    <insert id="creatOrderItems">
+        insert into
+        t_order_item (id, oid, pid, title, image, price, num, created_user, created_time)
+        values
+        <foreach collection="items" item="item" separator=",">
+            (#{item.id}, #{item.oid}, #{item.pid}, #{item.title}, #{item.image}, #{item.price}, #{item.num},
+            #{item.createdUser}, #{item.createdTime})
+        </foreach>
+    </insert>
+</mapper>

@@ -26,4 +26,12 @@
         insert into t_cart(cid, uid, pid, num, price, created_user, created_time)
         values (#{cid}, #{uid}, #{pid}, #{num}, #{price}, #{createdUser}, #{createdTime})
     </insert>
+    <delete id="delByCIds">
+        delete
+        from t_cart
+        where cid in
+        <foreach collection="cids" item="cid" open="(" close=")" separator=",">
+            #{cid}
+        </foreach>
+    </delete>
 </mapper>

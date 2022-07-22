@@ -44,4 +44,9 @@ public class CartServiceImpl implements CartService {
     mapper.addCart(cart);
   }
 
+  @Override
+  public void delete(Long uid, List<Long> cids) {
+    mapper.delByCIds(cids);
+  }
+
 }
