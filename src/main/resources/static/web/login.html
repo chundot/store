@@ -160,7 +160,7 @@
                         "token",
                         "Bearer" + json.data.token,
                         {"path": "/", "expires": 7});
-                    // location.href = "login.html";
+                    location.href = "index.html";
                     if (json.data.avatar === undefined) {
                         $.cookie("avatar", null, {"expires": -1});
                     } else {

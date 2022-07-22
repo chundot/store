@@ -8,9 +8,9 @@ import vip.lj.store.pojo.entity.Product;
 
 public interface CartService {
 
-  public List<CartInfoDTO> getByUserId(Long uid);
+  List<CartInfoDTO> getByUserId(Long uid);
 
-  public List<CartInfoDTO> getByCartIds(List<Long> cids);
+  List<CartInfoDTO> getByCartIds(List<Long> cids);
 
-  public void create(Product product, UserTokenDTO info, Integer num);
+  void create(Product product, UserTokenDTO info, Integer num);
 }
