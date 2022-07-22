@@ -1,4 +1,4 @@
-package vip.lj.store.controller.common;
+package vip.lj.store.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

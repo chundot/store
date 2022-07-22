@@ -9,5 +9,4 @@ public class CartInfoDTO {
   private String title;
   private long realPrice;
   private long num;
-
 }

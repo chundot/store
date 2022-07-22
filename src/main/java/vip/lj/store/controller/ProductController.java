@@ -33,7 +33,7 @@ public class ProductController {
   // 获取指定商品详情
   // 返回 title/sellPoint/price/image
   //
-  @GetMapping("/{id}/detail")
+  @GetMapping("/{id}/details")
   public Object getDetail(@PathVariable("id") Long id) {
     return ResUtils.ok(productService.getById(id));
   }

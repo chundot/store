@@ -9,8 +9,11 @@
         select cid, image, title, t_cart.price as realPrice, t_cart.num
         from t_cart
                  left join t_product tp
-                           on t_cart.num = tp.num
+                           on t_cart.pid = tp.id
         where uid = #{uid}
     </select>
-
+    <insert id="addCart">
+        insert into t_cart(cid, uid, pid, num, price, created_user, created_time)
+        values (#{cid}, #{uid}, #{pid}, #{num}, #{price}, #{createdUser}, #{createdTime})
+    </insert>
 </mapper>
