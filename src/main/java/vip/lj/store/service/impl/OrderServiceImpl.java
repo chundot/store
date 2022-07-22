@@ -1,15 +1,19 @@
 package vip.lj.store.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vip.lj.store.mapper.*;
 import vip.lj.store.pojo.dto.OrderAddDTO;
 import vip.lj.store.pojo.entity.Order;
+import vip.lj.store.pojo.vo.OrderVO;
 import vip.lj.store.service.OrderService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
   CartMapper cartMapper;
   UserMapper userMapper;
@@ -54,9 +58,19 @@ public class OrderServiceImpl implements OrderService {
     order.setStatus(0);
     // 插入数据
     orderMapper.createOrder(order);
+    var oid = order.getOid();
+    log.info("{}", order);
+    for (var item : items) {
+      item.setOid(oid);
+    }
     orderMapper.creatOrderItems(items);
     // 删除数据
     cartMapper.delByCIds(dto.getCids());
     order.setCreatedUser(username);
+  }
+
+  @Override
+  public List<OrderVO> getOrdersByUId(Long id) {
+    return orderMapper.getOrderById(id);
   }
 }

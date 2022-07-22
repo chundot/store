@@ -1,10 +1,7 @@
 package vip.lj.store.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import vip.lj.store.pojo.dto.OrderAddDTO;
 import vip.lj.store.service.OrderService;
@@ -26,6 +23,11 @@ public class OrderController {
     var id = JwtUtils.parseFromBearer(token);
     service.createOrder(id, dto);
     return ResUtils.ok();
+  }
+  @GetMapping
+  public Object GetOrders(@RequestHeader(value = "Authentication") String token) {
+    var id = JwtUtils.parseFromBearer(token);
+    return ResUtils.ok(service.getOrdersByUId(id));
   }
 
 }

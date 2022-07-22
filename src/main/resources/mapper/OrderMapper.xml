@@ -4,12 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="vip.lj.store.mapper.OrderMapper">
-    <insert id="createOrder">
+    <insert id="createOrder" useGeneratedKeys="true" keyProperty="oid">
         insert into t_order (oid, uid, recv_name, recv_phone, recv_province, recv_city, recv_area, recv_address, price,
-                             order_time, pay_time, status, created_user, created_time)
+        order_time, pay_time, status, created_user, created_time)
         values (#{oid}, #{uid}, #{recvName}, #{recvPhone}, #{recvProvince}, #{recvCity}, #{recvArea},
-                #{recvAddress}, #{price},
-                #{orderTime}, #{payTime}, #{status}, #{createdUser}, #{createdTime})
+        #{recvAddress}, #{price},
+        #{orderTime}, #{payTime}, #{status}, #{createdUser}, #{createdTime})
     </insert>
     <insert id="creatOrderItems">
         insert into
@@ -20,4 +20,24 @@
             #{item.createdUser}, #{item.createdTime})
         </foreach>
     </insert>
+    <select id="getOrderById" resultMap="OrderMap">
+        select *
+        from t_order
+                 left join t_order_item toi on t_order.oid = toi.oid
+        where uid = #{id}
+    </select>
+    <resultMap id="OrderMap" type="vip.lj.store.pojo.vo.OrderVO">
+        <id column="oid" property="oid"/>
+        <result column="recv_name" property="recvName"/>
+        <result column="price" property="price"/>
+        <result column="status" property="status"/>
+        <result column="order_time" property="orderTime"/>
+        <collection property="items" ofType="vip.lj.store.pojo.entity.OrderItem">
+            <id column="id" property="id"/>
+            <result column="title" property="title"/>
+            <result column="image" property="image"/>
+            <result column="price" property="price"/>
+            <result column="num" property="num"/>
+        </collection>
+    </resultMap>
 </mapper>

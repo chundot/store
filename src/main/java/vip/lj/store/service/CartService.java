@@ -17,5 +17,5 @@ public interface CartService {
 
   void delete(Long uid, List<Long> cids);
 
-    void modByDTO(CartModDTO dto);
+  void modByDTO(CartModDTO dto);
 }
